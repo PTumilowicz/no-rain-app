@@ -5,4 +5,6 @@ module com.example.norainapp {
 
     opens com.example.norainapp to javafx.fxml;
     exports com.example.norainapp;
+    exports com.example.norainapp.controller;
+    opens com.example.norainapp.controller to javafx.fxml;
 }
