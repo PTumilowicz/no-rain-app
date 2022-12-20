@@ -28,6 +28,4 @@ public class SavedProperties {
         leftCityName = properties.getProperty("leftCityName");
         rightCityName = properties.getProperty("rightCityName");
     }
-
-
 }

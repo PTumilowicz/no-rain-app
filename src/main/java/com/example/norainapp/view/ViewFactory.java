@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,7 +38,11 @@ public class ViewFactory {
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
 
-        stage.setTitle("Complain that there's... - NoRain App");
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(getClass().getResource("css/styles.css").toExternalForm());
+
+        stage.initStyle(StageStyle.UNDECORATED);
+
         stage.setScene(scene);
         stage.show();
         activeStages.add(stage);

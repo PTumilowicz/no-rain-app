@@ -40,13 +40,13 @@ public class LeftCityModalController extends BaseController implements Initializ
         SavedProperties.saveProperties();
 
         exitModalAction();
-        viewFactory.showMainWindow();
     }
 
     @FXML
     void exitModalAction() {
         Stage stage = (Stage) leftCityTextField.getScene().getWindow();
         viewFactory.closeStage(stage);
+        viewFactory.showMainWindow();
     }
 
     public LeftCityModalController(ViewFactory viewFactory, String fxmlName) {

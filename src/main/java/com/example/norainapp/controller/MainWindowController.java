@@ -9,6 +9,7 @@ import com.example.norainapp.view.ViewFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
@@ -23,6 +24,13 @@ public class MainWindowController extends BaseController implements Initializabl
     private Weather rightWeather;
     private ArrayList<Weather> leftForecast;
     private ArrayList<Weather> rightForecast;
+
+    @FXML
+    private ImageView closeImage;
+    @FXML
+    private Label leftCityDateTime;
+    @FXML
+    private Label rightCityDateTime;
     @FXML
     private Label leftCityFifthDayDate;
     @FXML
@@ -49,8 +57,6 @@ public class MainWindowController extends BaseController implements Initializabl
     private ImageView leftCitySecondDayImg;
     @FXML
     private Label leftCitySecondDayTemp;
-    @FXML
-    private Label leftCityTempFeel;
     @FXML
     private Label leftCityTempMax;
     @FXML
@@ -88,8 +94,6 @@ public class MainWindowController extends BaseController implements Initializabl
     @FXML
     private Label rightCitySecondDayTemp;
     @FXML
-    private Label rightCityTempFeel;
-    @FXML
     private Label rightCityTempMax;
     @FXML
     private Label rightCityThirdDayDate;
@@ -113,6 +117,12 @@ public class MainWindowController extends BaseController implements Initializabl
         viewFactory.showRightCityModal();
     }
 
+    @FXML
+    void closeAction() {
+        Stage stage = (Stage) rightCityName.getScene().getWindow();
+        viewFactory.closeStage(stage);
+    }
+
     void showLeftWeatherAction(String cityName) {
         WeatherClient weatherClient = weatherService.getWeatherClient();
 
@@ -121,12 +131,26 @@ public class MainWindowController extends BaseController implements Initializabl
         leftForecast = weatherClient.getForecast(cityName);
 
         // Show the current weather for selected city
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM HH:mm");
+
         leftCityName.setVisible(true);
         leftCityName.setText(leftWeather.getCityName());
         leftCityTempMax.setVisible(true);
         leftCityTempMax.setText(leftWeather.getTempInCelsius() + " °C");
-        leftCityTempFeel.setVisible(true);
-        leftCityTempFeel.setText(leftWeather.getFeelsLike() + " °C");
+        leftCityDateTime.setText(leftWeather.getDate().format(dateTimeFormatter));
+
+        Image image = switch (leftWeather.getWeatherDescription()) {
+            case "Clear sky", "Clear" -> new Image("sun.png");
+            case "Few clouds" -> new Image("cloud_sun.png");
+            case "Scattered clouds", "Broken clouds", "Clouds" -> new Image("cloud.png");
+            case "Shower rain", "Rain", "Drizzle" -> new Image("rain.png");
+            case "Thunderstorm" -> new Image("storm.png");
+            case "Snow" -> new Image("snow.png");
+            case "Mist", "Smoke", "Haze", "Dust", "Fog" -> new Image("mist.png");
+            default -> new Image("sun.png");
+        };
+
+        leftCityWeatherImg.setImage(image);
 
         // Show the forecast for selected city
         leftCityFirstDayTemp.setText(leftForecast.get(0).getTempInCelsius() + " °C");
@@ -152,12 +176,28 @@ public class MainWindowController extends BaseController implements Initializabl
         rightForecast = weatherClient.getForecast(cityName);
 
         // Show the current weather for selected city
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM HH:mm");
+
         rightCityName.setVisible(true);
         rightCityName.setText(rightWeather.getCityName());
         rightCityTempMax.setVisible(true);
         rightCityTempMax.setText(rightWeather.getTempInCelsius() + " °C");
-        rightCityTempFeel.setVisible(true);
-        rightCityTempFeel.setText(rightWeather.getFeelsLike() + " °C");
+        rightCityDateTime.setText(rightWeather.getDate().format(dateTimeFormatter));
+
+        System.out.println(rightWeather.getWeatherDescription());
+
+        Image image = switch (rightWeather.getWeatherDescription()) {
+            case "Clear sky", "Clear" -> new Image("sun.png");
+            case "Few clouds" -> new Image("cloud_sun.png");
+            case "Scattered clouds", "Broken clouds", "Clouds" -> new Image("cloud.png");
+            case "Shower rain", "Rain", "Drizzle" -> new Image("rain.png");
+            case "Thunderstorm" -> new Image("storm.png");
+            case "Snow" -> new Image("snow.png");
+            case "Mist", "Smoke", "Haze", "Dust", "Fog" -> new Image("mist.png");
+            default -> new Image("sun.png");
+        };
+
+        rightCityWeatherImg.setImage(image);
 
         // Show the forecast for selected city
         rightCityFirstDayTemp.setText(rightForecast.get(0).getTempInCelsius() + " °C");
@@ -166,13 +206,13 @@ public class MainWindowController extends BaseController implements Initializabl
         rightCityFourthDayTemp.setText(rightForecast.get(3).getTempInCelsius() + " °C");
         rightCityFifthDayTemp.setText(rightForecast.get(4).getTempInCelsius() + " °C");
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE");
+        DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("EEE");
 
-        rightCityFirstDayDate.setText(rightForecast.get(0).getDate().format(formatter));
-        rightCitySecondDayDate.setText(rightForecast.get(1).getDate().format(formatter));
-        rightCityThirdDayDate.setText(rightForecast.get(2).getDate().format(formatter));
-        rightCityFourthDayDate.setText(rightForecast.get(3).getDate().format(formatter));
-        rightCityFifthDayDate.setText(rightForecast.get(4).getDate().format(formatter));
+        rightCityFirstDayDate.setText(rightForecast.get(0).getDate().format(dayFormatter));
+        rightCitySecondDayDate.setText(rightForecast.get(1).getDate().format(dayFormatter));
+        rightCityThirdDayDate.setText(rightForecast.get(2).getDate().format(dayFormatter));
+        rightCityFourthDayDate.setText(rightForecast.get(3).getDate().format(dayFormatter));
+        rightCityFifthDayDate.setText(rightForecast.get(4).getDate().format(dayFormatter));
     }
 
     public MainWindowController(ViewFactory viewFactory, String fxmlName) {

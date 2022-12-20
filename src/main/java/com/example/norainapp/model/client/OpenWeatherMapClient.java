@@ -1,14 +1,11 @@
 package com.example.norainapp.model.client;
 
-import com.example.norainapp.SavedProperties;
 import com.example.norainapp.model.Weather;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,11 +20,11 @@ public class OpenWeatherMapClient implements WeatherClient {
     private static final String API_ID = "fc4be267d4aa71af6466c19cef08ca97";
     private static final String LANGUAGE = "pl";
     private static final String UNITS = "metric";
-    private RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @Override
     public Weather getWeather(String cityName) {
-        int temperature, feelsLike;
+        int temperature;
         String weatherDescription;
 
         String response = restTemplate.getForObject(WEATHER_URL_BEGIN + "q={city}&appid=" + API_ID + "&lang=" + LANGUAGE + "&units=" + UNITS,
@@ -37,10 +34,9 @@ public class OpenWeatherMapClient implements WeatherClient {
         JsonArray weather = new Gson().fromJson(response, JsonObject.class).getAsJsonArray("weather");
 
         temperature = (int) Math.round(main.get("temp").getAsDouble());
-        feelsLike = (int) Math.round(main.get("feels_like").getAsDouble());
         weatherDescription = weather.get(0).getAsJsonObject().get("main").getAsString();
 
-        return new Weather(cityName, temperature, feelsLike, LocalDateTime.now(), weatherDescription);
+        return new Weather(cityName, temperature, LocalDateTime.now(), weatherDescription);
     }
 
     @Override
@@ -84,7 +80,6 @@ public class OpenWeatherMapClient implements WeatherClient {
                         Weather forecastWeather = new Weather(
                                 cityName,
                                 (int) Math.round(main.get("temp").getAsDouble()),
-                                main.get("feels_like").getAsDouble(),
                                 convertedUnixTimeStamp,
                                 weather.get(0).getAsJsonObject().get("main").getAsString());
                         forecast.add(forecastWeather);

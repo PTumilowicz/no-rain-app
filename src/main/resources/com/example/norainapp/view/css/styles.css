@@ -1,0 +1,17 @@
+#splitPane,
+#anchorPane {
+    -fx-background-image: url("../img/dark_cloudy_sky.jpg");
+}
+
+.button {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-radius: 0;
+    -fx-background-color: transparent;
+    -fx-text-fill: #F5F5F5;
+}
+
+.button:pressed {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+}

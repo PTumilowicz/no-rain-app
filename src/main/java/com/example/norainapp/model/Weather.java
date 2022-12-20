@@ -6,14 +6,12 @@ import java.util.Objects;
 public class Weather {
     private String cityName;
     private int tempInCelsius;
-    private double feelsLike;
     private LocalDateTime date;
     private String weatherDescription;
 
-    public Weather(String cityName, int tempInCelsius, double feelsLike, LocalDateTime date, String weatherDescription) {
+    public Weather(String cityName, int tempInCelsius, LocalDateTime date, String weatherDescription) {
         this.cityName = cityName;
         this.tempInCelsius = tempInCelsius;
-        this.feelsLike = feelsLike;
         this.date = date;
         this.weatherDescription = weatherDescription;
     }
@@ -28,10 +26,6 @@ public class Weather {
 
     public LocalDateTime getDate() {
         return date;
-    }
-
-    public double getFeelsLike() {
-        return feelsLike;
     }
 
     public String getWeatherDescription() {
@@ -55,7 +49,6 @@ public class Weather {
         return "Weather{" +
                 "cityName='" + cityName + '\'' +
                 ", tempInCelsius=" + tempInCelsius +
-                ", feelsLike=" + feelsLike +
                 ", date=" + date +
                 ", weatherDescription='" + weatherDescription + '\'' +
                 '}';
