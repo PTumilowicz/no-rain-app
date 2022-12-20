@@ -1,29 +1,41 @@
 package com.example.norainapp.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Weather {
     private String cityName;
-    private double tempInCelsius;
-    private LocalDate date;
+    private int tempInCelsius;
+    private double feelsLike;
+    private LocalDateTime date;
+    private String weatherDescription;
 
-    public Weather(String cityName, double tempInCelsius, LocalDate date) {
+    public Weather(String cityName, int tempInCelsius, double feelsLike, LocalDateTime date, String weatherDescription) {
         this.cityName = cityName;
         this.tempInCelsius = tempInCelsius;
+        this.feelsLike = feelsLike;
         this.date = date;
+        this.weatherDescription = weatherDescription;
     }
 
     public String getCityName() {
         return cityName;
     }
 
-    public double getTempInCelsius() {
+    public int getTempInCelsius() {
         return tempInCelsius;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
+    }
+
+    public double getFeelsLike() {
+        return feelsLike;
+    }
+
+    public String getWeatherDescription() {
+        return weatherDescription;
     }
 
     @Override
@@ -43,7 +55,9 @@ public class Weather {
         return "Weather{" +
                 "cityName='" + cityName + '\'' +
                 ", tempInCelsius=" + tempInCelsius +
+                ", feelsLike=" + feelsLike +
                 ", date=" + date +
+                ", weatherDescription='" + weatherDescription + '\'' +
                 '}';
     }
 }

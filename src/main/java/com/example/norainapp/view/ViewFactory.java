@@ -4,6 +4,7 @@ import com.example.norainapp.Launcher;
 import com.example.norainapp.controller.BaseController;
 import com.example.norainapp.controller.LeftCityModalController;
 import com.example.norainapp.controller.MainWindowController;
+import com.example.norainapp.controller.RightCityModalController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -49,6 +50,11 @@ public class ViewFactory {
 
     public void showLeftCityModal() {
         BaseController controller = new LeftCityModalController(this, "leftCityModalView.fxml");
+        initializeStage(controller);
+    }
+
+    public void showRightCityModal() {
+        BaseController controller = new RightCityModalController(this, "rightCityModalView.fxml");
         initializeStage(controller);
     }
 

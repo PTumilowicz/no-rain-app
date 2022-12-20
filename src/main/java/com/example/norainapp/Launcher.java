@@ -12,6 +12,7 @@ public class Launcher extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         ViewFactory viewFactory = new ViewFactory();
+        SavedProperties.loadProperties();
         viewFactory.showMainWindow();
     }
 

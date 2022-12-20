@@ -15,20 +15,20 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LeftCityModalController extends BaseController implements Initializable {
+public class RightCityModalController extends BaseController implements Initializable {
     @FXML
     private Label errorLabel;
     @FXML
-    private TextField leftCityTextField;
+    private TextField rightCityTextField;
     private WeatherService weatherService;
     @FXML
-    void chooseLeftCityAction() throws IOException {
+    void chooseRightCityAction() throws IOException {
         String cityInput;
-        if (leftCityTextField.getText().isEmpty()) {
+        if (rightCityTextField.getText().isEmpty()) {
             errorLabel.setText("You didn't choose a city!");
         }
 
-        cityInput = leftCityTextField.getText();
+        cityInput = rightCityTextField.getText();
         WeatherClient weatherClient = weatherService.getWeatherClient();
 
         if (!weatherClient.checkCity(cityInput)) {
@@ -36,7 +36,7 @@ public class LeftCityModalController extends BaseController implements Initializ
             return;
         }
 
-        SavedProperties.leftCityName = leftCityTextField.getText();
+        SavedProperties.rightCityName = rightCityTextField.getText();
         SavedProperties.saveProperties();
 
         exitModalAction();
@@ -45,11 +45,11 @@ public class LeftCityModalController extends BaseController implements Initializ
 
     @FXML
     void exitModalAction() {
-        Stage stage = (Stage) leftCityTextField.getScene().getWindow();
+        Stage stage = (Stage) rightCityTextField.getScene().getWindow();
         viewFactory.closeStage(stage);
     }
 
-    public LeftCityModalController(ViewFactory viewFactory, String fxmlName) {
+    public RightCityModalController(ViewFactory viewFactory, String fxmlName) {
         super(viewFactory, fxmlName);
     }
 

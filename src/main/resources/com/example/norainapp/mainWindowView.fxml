@@ -79,7 +79,7 @@
                               <Separator orientation="VERTICAL" prefHeight="200.0" />
                            </children>
                         </HBox>
-                        <Button mnemonicParsing="false" onAction="#chooseBaseCityAction" text="Choose base city" />
+                        <Button mnemonicParsing="false" onAction="#chooseLeftCityAction" text="Choose base city" />
                      </children>
                   </VBox>
                </children>
@@ -141,7 +141,7 @@
                               <Separator orientation="VERTICAL" prefHeight="200.0" />
                            </children>
                         </HBox>
-                        <Button mnemonicParsing="false" onAction="#chooseDestCityAction" text="Choose dest. city" />
+                        <Button mnemonicParsing="false" onAction="#chooseRightCityAction" text="Choose dest. city" />
                      </children>
                   </VBox>
                </children>
