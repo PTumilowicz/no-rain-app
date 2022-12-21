@@ -25,7 +25,13 @@ public class SavedProperties {
 
     public static void loadProperties() throws IOException {
         properties.load(new FileReader("cityNames.properties"));
-        leftCityName = properties.getProperty("leftCityName");
-        rightCityName = properties.getProperty("rightCityName");
+
+        if (properties.getProperty("leftCityName") != null) {
+            leftCityName = properties.getProperty("leftCityName");
+        }
+
+        if (properties.getProperty("rightCityName") != null) {
+            rightCityName = properties.getProperty("rightCityName");
+        }
     }
 }

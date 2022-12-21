@@ -26,13 +26,14 @@ public class LeftCityModalController extends BaseController implements Initializ
         String cityInput;
         if (leftCityTextField.getText().isEmpty()) {
             errorLabel.setText("You didn't choose a city!");
+            return;
         }
 
         cityInput = leftCityTextField.getText();
         WeatherClient weatherClient = weatherService.getWeatherClient();
 
         if (!weatherClient.checkCity(cityInput)) {
-            errorLabel.setText("City not found.");
+            errorLabel.setText("City not found. Try again.");
             return;
         }
 

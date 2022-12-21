@@ -26,13 +26,14 @@ public class RightCityModalController extends BaseController implements Initiali
         String cityInput;
         if (rightCityTextField.getText().isEmpty()) {
             errorLabel.setText("You didn't choose a city!");
+            return;
         }
 
         cityInput = rightCityTextField.getText();
         WeatherClient weatherClient = weatherService.getWeatherClient();
 
         if (!weatherClient.checkCity(cityInput)) {
-            errorLabel.setText("City not found.");
+            errorLabel.setText("City not found. Try again.");
             return;
         }
 
@@ -40,13 +41,13 @@ public class RightCityModalController extends BaseController implements Initiali
         SavedProperties.saveProperties();
 
         exitModalAction();
-        viewFactory.showMainWindow();
     }
 
     @FXML
     void exitModalAction() {
         Stage stage = (Stage) rightCityTextField.getScene().getWindow();
         viewFactory.closeStage(stage);
+        viewFactory.showMainWindow();
     }
 
     public RightCityModalController(ViewFactory viewFactory, String fxmlName) {

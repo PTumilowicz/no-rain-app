@@ -42,8 +42,41 @@ public class OpenWeatherMapClient implements WeatherClient {
     @Override
     public boolean checkCity(String cityName) {
         String response = restTemplate.getForObject(GEO_URL_BEGIN + "q={city}&appid=" + API_ID, String.class, cityName);
-        assert response != null;
         return !response.equals("[]");
+    }
+
+    @Override
+    public String getEngCityAndCountryName(String cityName) {
+        String response = restTemplate.getForObject(GEO_URL_BEGIN + "q={city}&appid=" + API_ID, String.class, cityName);
+        String engCityName = null;
+
+        try {
+            engCityName = new Gson().fromJson(response, JsonArray.class).
+                    get(0).
+                    getAsJsonObject().
+                    getAsJsonObject("local_names").
+                    get("en").
+                    toString().
+                    replaceAll("\"", "");
+        } catch (Exception e) {
+            engCityName = new Gson().fromJson(response, JsonArray.class).
+                    get(0).
+                    getAsJsonObject().
+                    get("name").
+                    toString().
+                    replaceAll("\"", "");
+        }
+
+        String countryName = new Gson().fromJson(response, JsonArray.class).
+                get(0).
+                getAsJsonObject().
+                get("country").
+                toString().
+                replaceAll("\"", "");
+
+        String completeCountryAndCity = engCityName  + ", " + countryName;
+
+        return completeCountryAndCity;
     }
 
     @Override
