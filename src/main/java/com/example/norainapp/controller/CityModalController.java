@@ -14,22 +14,30 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
-public class LeftCityModalController extends BaseController implements Initializable {
+public class CityModalController extends BaseController implements Initializable {
+    private final Consumer<String> cityCallback;
     @FXML
     private Label errorLabel;
     @FXML
-    private TextField leftCityTextField;
+    private TextField cityTextField;
     private WeatherService weatherService;
+
+    public CityModalController(ViewFactory viewFactory, String fxmlName, Consumer<String> cityCallback) {
+        super(viewFactory, fxmlName);
+        this.cityCallback = cityCallback;
+    }
+
     @FXML
-    void chooseLeftCityAction() throws IOException {
+    void chooseCityAction() throws IOException {
         String cityInput;
-        if (leftCityTextField.getText().isEmpty()) {
+        if (cityTextField.getText().isEmpty()) {
             errorLabel.setText("You didn't choose a city!");
             return;
         }
 
-        cityInput = leftCityTextField.getText();
+        cityInput = cityTextField.getText();
         WeatherClient weatherClient = weatherService.getWeatherClient();
 
         if (!weatherClient.checkCity(cityInput)) {
@@ -37,21 +45,17 @@ public class LeftCityModalController extends BaseController implements Initializ
             return;
         }
 
-        SavedProperties.leftCityName = leftCityTextField.getText();
-        SavedProperties.saveProperties();
+        //SavedProperties.rightCityName = rightCityTextField.getText();
+        //SavedProperties.saveProperties();
 
+        cityCallback.accept(cityInput);
         exitModalAction();
     }
 
     @FXML
     void exitModalAction() {
-        Stage stage = (Stage) leftCityTextField.getScene().getWindow();
+        Stage stage = (Stage) cityTextField.getScene().getWindow();
         viewFactory.closeStage(stage);
-        viewFactory.showMainWindow();
-    }
-
-    public LeftCityModalController(ViewFactory viewFactory, String fxmlName) {
-        super(viewFactory, fxmlName);
     }
 
     @Override

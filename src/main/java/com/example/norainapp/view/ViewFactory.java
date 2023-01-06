@@ -1,20 +1,16 @@
 package com.example.norainapp.view;
 
 import com.example.norainapp.Launcher;
-import com.example.norainapp.controller.BaseController;
-import com.example.norainapp.controller.LeftCityModalController;
-import com.example.norainapp.controller.MainWindowController;
-import com.example.norainapp.controller.RightCityModalController;
+import com.example.norainapp.controller.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class ViewFactory {
     private ArrayList<Stage> activeStages;
@@ -54,13 +50,8 @@ public class ViewFactory {
         initializeStage(controller);
     }
 
-    public void showLeftCityModal() {
-        BaseController controller = new LeftCityModalController(this, "leftCityModalView.fxml");
-        initializeStage(controller);
-    }
-
-    public void showRightCityModal() {
-        BaseController controller = new RightCityModalController(this, "rightCityModalView.fxml");
+    public void showCityModal(Consumer<String> cityCallback) {
+        BaseController controller = new CityModalController(this, "cityModalView.fxml", cityCallback);
         initializeStage(controller);
     }
 

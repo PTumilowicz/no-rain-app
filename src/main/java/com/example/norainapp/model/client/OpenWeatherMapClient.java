@@ -26,9 +26,15 @@ public class OpenWeatherMapClient implements WeatherClient {
     public Weather getWeather(String cityName) {
         int temperature;
         String weatherDescription;
+        String response = null;
 
-        String response = restTemplate.getForObject(WEATHER_URL_BEGIN + "q={city}&appid=" + API_ID + "&lang=" + LANGUAGE + "&units=" + UNITS,
-                String.class, cityName);
+        try {
+            response = restTemplate.getForObject(WEATHER_URL_BEGIN + "q={city}&appid=" + API_ID + "&lang=" + LANGUAGE + "&units=" + UNITS,
+                    String.class, cityName);
+        } catch (Exception e) {
+            System.out.println("City not found");
+            return null;
+        }
 
         JsonObject main = new Gson().fromJson(response, JsonObject.class).getAsJsonObject("main");
         JsonArray weather = new Gson().fromJson(response, JsonObject.class).getAsJsonArray("weather");
@@ -41,13 +47,26 @@ public class OpenWeatherMapClient implements WeatherClient {
 
     @Override
     public boolean checkCity(String cityName) {
-        String response = restTemplate.getForObject(GEO_URL_BEGIN + "q={city}&appid=" + API_ID, String.class, cityName);
+        String response = null;
+        try {
+            response = restTemplate.getForObject(GEO_URL_BEGIN + "q={city}&appid=" + API_ID, String.class, cityName);
+        } catch (Exception e) {
+            System.out.println("City not found");
+            response = "[]";
+        }
+
         return !response.equals("[]");
     }
 
     @Override
     public String getEngCityAndCountryName(String cityName) {
-        String response = restTemplate.getForObject(GEO_URL_BEGIN + "q={city}&appid=" + API_ID, String.class, cityName);
+        String response = null;
+        try {
+            response = restTemplate.getForObject(GEO_URL_BEGIN + "q={city}&appid=" + API_ID, String.class, cityName);
+        } catch (Exception e) {
+            return null;
+        }
+
         String engCityName = null;
 
         try {
@@ -81,7 +100,13 @@ public class OpenWeatherMapClient implements WeatherClient {
 
     @Override
     public ArrayList<Weather> getForecast(String cityName) {
-        String response = restTemplate.getForObject(FORECAST_URL_BEGIN + "q={city}&appid=" + API_ID + "&units=" + UNITS, String.class, cityName);
+        String response = null;
+        try {
+            response = restTemplate.getForObject(FORECAST_URL_BEGIN + "q={city}&appid=" + API_ID + "&units=" + UNITS, String.class, cityName);
+        } catch (Exception e) {
+            return null;
+        }
+
         ArrayList<Weather> forecast = new ArrayList<>();
         ArrayList<Long> unixDateDays = new ArrayList<>();
 

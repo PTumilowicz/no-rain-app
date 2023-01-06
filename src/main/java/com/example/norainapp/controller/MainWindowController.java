@@ -104,16 +104,12 @@ public class MainWindowController extends BaseController implements Initializabl
 
     @FXML
     void chooseLeftCityAction() {
-        Stage stage = (Stage) leftCityName.getScene().getWindow();
-        viewFactory.closeStage(stage);
-        viewFactory.showLeftCityModal();
+        viewFactory.showCityModal(this::showLeftWeatherAction);
     }
 
     @FXML
     void chooseRightCityAction() {
-        Stage stage = (Stage) rightCityName.getScene().getWindow();
-        viewFactory.closeStage(stage);
-        viewFactory.showRightCityModal();
+        viewFactory.showCityModal(this::showRightWeatherAction);
     }
 
     @FXML
