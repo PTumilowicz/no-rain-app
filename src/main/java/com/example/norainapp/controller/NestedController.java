@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -59,8 +60,18 @@ public class NestedController implements Initializable {
     private Label cityThirdDayTemp;
     @FXML
     private ImageView cityWeatherImg;
+    private boolean isLeft;
     private WeatherService weatherService;
-    private ViewFactory viewFactory = new ViewFactory();
+    private final ViewFactory viewFactory = new ViewFactory();
+    private final SavedProperties savedProperties;
+
+    public NestedController() throws IOException {
+        this.savedProperties = new SavedProperties();
+    }
+
+    public void setLeft(boolean isLeft) {
+        this.isLeft = isLeft;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -68,8 +79,8 @@ public class NestedController implements Initializable {
     }
 
     @FXML
-    void chooseCityAction() {
-        viewFactory.showCityModal(this::showWeatherAction);
+    void chooseCityAction() throws IOException {
+        viewFactory.showCityModal(this::showWeatherAction, isLeft);
     }
 
     void showWeatherAction(String cityName) {
@@ -84,7 +95,6 @@ public class NestedController implements Initializable {
             forecast = weatherClient.getForecast(cityName);
         } catch (Exception e) {
             System.out.println("Error happened. No weather available for this city.");
-            SavedProperties.leftCityName = "";
             return;
         }
 
@@ -126,6 +136,10 @@ public class NestedController implements Initializable {
         this.cityFifthDayDate.setText(forecast.get(4).getDate().format(formatter));
         image = getWeatherImage(forecast.get(4).getWeatherDescription());
         this.cityFifthDayImg.setImage(image);
+    }
+
+    void showCityNotChosen() {
+        this.cityTempMax.setText("City not chosen");
     }
 
     private Image getWeatherImage(String weatherDescription) {

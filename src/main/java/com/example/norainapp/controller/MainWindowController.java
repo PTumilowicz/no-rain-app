@@ -1,42 +1,42 @@
 package com.example.norainapp.controller;
 
 import com.example.norainapp.SavedProperties;
-import com.example.norainapp.model.Weather;
-import com.example.norainapp.model.WeatherService;
-import com.example.norainapp.model.WeatherServiceFactory;
-import com.example.norainapp.model.client.WeatherClient;
 import com.example.norainapp.view.ViewFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class MainWindowController extends BaseController implements Initializable {
     @FXML Label poweredBy;
     @FXML NestedController leftNestedController;
     @FXML NestedController rightNestedController;
+    private final SavedProperties savedProperties;
 
-    public MainWindowController(ViewFactory viewFactory, String fxmlName) {
+    public MainWindowController(ViewFactory viewFactory, String fxmlName) throws IOException {
         super(viewFactory, fxmlName);
+        savedProperties = new SavedProperties();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        leftNestedController.setLeft(true);
+        rightNestedController.setLeft(false);
 
-        if (SavedProperties.leftCityName != null) {
-            leftNestedController.showWeatherAction(SavedProperties.leftCityName);
+        try {
+            leftNestedController.showWeatherAction(savedProperties.getLeftCityName());
+        } catch (Exception e) {
+            leftNestedController.showCityNotChosen();
         }
 
-        if (SavedProperties.rightCityName != null) {
-            rightNestedController.showWeatherAction(SavedProperties.rightCityName);
+        try {
+            rightNestedController.showWeatherAction(savedProperties.getRightCityName());
+        } catch (Exception e) {
+            rightNestedController.showCityNotChosen();
         }
     }
 

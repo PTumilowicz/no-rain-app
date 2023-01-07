@@ -1,5 +1,6 @@
 package com.example.norainapp.controller;
 
+import com.example.norainapp.SavedProperties;
 import com.example.norainapp.model.WeatherService;
 import com.example.norainapp.model.WeatherServiceFactory;
 import com.example.norainapp.model.client.WeatherClient;
@@ -22,14 +23,18 @@ public class CityModalController extends BaseController implements Initializable
     @FXML
     private TextField cityTextField;
     private WeatherService weatherService;
+    private SavedProperties savedProperties;
+    private boolean isLeft;
 
-    public CityModalController(ViewFactory viewFactory, String fxmlName, Consumer<String> cityCallback) {
+    public CityModalController(ViewFactory viewFactory, String fxmlName, Consumer<String> cityCallback, boolean isLeft) throws IOException {
         super(viewFactory, fxmlName);
         this.cityCallback = cityCallback;
+        this.savedProperties = new SavedProperties();
+        this.isLeft = isLeft;
     }
 
     @FXML
-    void chooseCityAction() {
+    void chooseCityAction() throws IOException {
         String cityInput;
         if (cityTextField.getText().isEmpty()) {
             errorLabel.setText("You didn't choose a city!");
@@ -42,6 +47,12 @@ public class CityModalController extends BaseController implements Initializable
         if (!weatherClient.checkCity(cityInput)) {
             errorLabel.setText("City not found. Try again.");
             return;
+        }
+
+        if (isLeft) {
+            savedProperties.setLeftCityName(cityInput);
+        } else {
+            savedProperties.setRightCityName(cityInput);
         }
 
         cityCallback.accept(cityInput);

@@ -47,13 +47,13 @@ public class ViewFactory {
         activeStages.add(stage);
     }
 
-    public void showMainWindow() {
+    public void showMainWindow() throws IOException {
         BaseController controller = new MainWindowController(this, "mainWindowView.fxml");
         initializeStage(controller);
     }
 
-    public void showCityModal(Consumer<String> cityCallback) {
-        BaseController controller = new CityModalController(this, "cityModalView.fxml", cityCallback);
+    public void showCityModal(Consumer<String> cityCallback, boolean isLeft) throws IOException {
+        BaseController controller = new CityModalController(this, "cityModalView.fxml", cityCallback, isLeft);
         initializeStage(controller);
     }
 
