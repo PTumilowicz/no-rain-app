@@ -1,6 +1,5 @@
 package com.example.norainapp.controller;
 
-import com.example.norainapp.SavedProperties;
 import com.example.norainapp.model.WeatherService;
 import com.example.norainapp.model.WeatherServiceFactory;
 import com.example.norainapp.model.client.WeatherClient;
@@ -30,7 +29,7 @@ public class CityModalController extends BaseController implements Initializable
     }
 
     @FXML
-    void chooseCityAction() throws IOException {
+    void chooseCityAction() {
         String cityInput;
         if (cityTextField.getText().isEmpty()) {
             errorLabel.setText("You didn't choose a city!");
@@ -44,9 +43,6 @@ public class CityModalController extends BaseController implements Initializable
             errorLabel.setText("City not found. Try again.");
             return;
         }
-
-        //SavedProperties.rightCityName = rightCityTextField.getText();
-        //SavedProperties.saveProperties();
 
         cityCallback.accept(cityInput);
         exitModalAction();

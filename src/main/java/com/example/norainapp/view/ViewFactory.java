@@ -1,7 +1,9 @@
 package com.example.norainapp.view;
 
 import com.example.norainapp.Launcher;
-import com.example.norainapp.controller.*;
+import com.example.norainapp.controller.BaseController;
+import com.example.norainapp.controller.CityModalController;
+import com.example.norainapp.controller.MainWindowController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

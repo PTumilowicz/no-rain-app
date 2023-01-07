@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="339.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.norainapp.controller.NestedController">
+   <children>
+      <VBox alignment="CENTER" prefHeight="450.0" prefWidth="300.0">
+         <children>
+            <Label fx:id="cityName" text="cityName" textFill="WHITE" visible="false">
+               <font>
+                  <Font name="Montserrat Bold" size="14.0" />
+               </font>
+               <padding>
+                  <Insets bottom="10.0" />
+               </padding></Label>
+            <Label fx:id="cityDateTime" text="leftCityDateTime" textAlignment="CENTER" textFill="WHITE" visible="false" />
+            <ImageView fx:id="cityWeatherImg" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin></ImageView>
+            <HBox alignment="CENTER" prefHeight="75.0" prefWidth="200.0">
+               <children>
+                  <Label fx:id="cityTempMax" text="no city selected" textFill="WHITE">
+                     <font>
+                        <Font name="Montserrat Bold" size="14.0" />
+                     </font></Label>
+               </children>
+            </HBox>
+            <HBox fx:id="forecastBox" alignment="CENTER" minWidth="-Infinity" prefHeight="100.0" prefWidth="300.0" visible="false">
+               <children>
+                  <VBox alignment="CENTER" minWidth="-Infinity" prefHeight="200.0" prefWidth="55.0">
+                     <children>
+                        <ImageView fx:id="cityFirstDayImg" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+                        <Label fx:id="cityFirstDayTemp" text="Label" textFill="WHITE" />
+                        <Label fx:id="cityFirstDayDate" text="Label" textFill="WHITE" />
+                     </children>
+                  </VBox>
+                  <Separator orientation="VERTICAL" prefHeight="200.0" />
+                  <VBox alignment="CENTER" minWidth="-Infinity" prefHeight="200.0" prefWidth="55.0">
+                     <children>
+                        <ImageView fx:id="citySecondDayImg" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+                        <Label fx:id="citySecondDayTemp" text="Label" textFill="WHITE" />
+                        <Label fx:id="citySecondDayDate" text="Label" textFill="WHITE" />
+                     </children>
+                  </VBox>
+                  <Separator orientation="VERTICAL" prefHeight="200.0" />
+                  <VBox alignment="CENTER" minWidth="-Infinity" prefHeight="200.0" prefWidth="55.0">
+                     <children>
+                        <ImageView fx:id="cityThirdDayImg" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+                        <Label fx:id="cityThirdDayTemp" text="Label" textFill="WHITE" />
+                        <Label fx:id="cityThirdDayDate" text="Label" textFill="WHITE" />
+                     </children>
+                  </VBox>
+                  <Separator orientation="VERTICAL" prefHeight="200.0" />
+                  <VBox alignment="CENTER" minWidth="-Infinity" prefHeight="200.0" prefWidth="55.0">
+                     <children>
+                        <ImageView fx:id="cityFourthDayImg" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+                        <Label fx:id="cityFourthDayTemp" text="Label" textFill="WHITE" />
+                        <Label fx:id="cityFourthDayDate" text="Label" textFill="WHITE" />
+                     </children>
+                  </VBox>
+                  <Separator orientation="VERTICAL" prefHeight="200.0" />
+                  <VBox alignment="CENTER" minWidth="-Infinity" prefHeight="200.0" prefWidth="55.0">
+                     <children>
+                        <ImageView fx:id="cityFifthDayImg" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+                        <Label fx:id="cityFifthDayTemp" text="Label" textFill="WHITE" />
+                        <Label fx:id="cityFifthDayDate" text="Label" textFill="WHITE" />
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" />
+               </padding>
+            </HBox>
+            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#chooseCityAction" text="Choose city" textFill="WHITE">
+               <font>
+                  <Font name="Montserrat Bold" size="12.0" />
+               </font></Button>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
+
