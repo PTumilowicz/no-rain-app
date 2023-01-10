@@ -3,14 +3,19 @@ package com.example.norainapp.model.client;
 import com.example.norainapp.model.Weather;
 import com.example.norainapp.model.WeatherDescription;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import java.time.LocalDateTime;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class OpenWeatherMapClientTest {
+    @Mock
     OpenWeatherMapClient openWeatherMapClient = mock(OpenWeatherMapClient.class);
 
     @Test
@@ -21,10 +26,9 @@ class OpenWeatherMapClientTest {
 
         //When
         Weather weather = openWeatherMapClient.getWeather("Kraków");
-        System.out.println(weather);
 
         //Then
-        //assertThat(weather, is(notNullValue()));
+        assertThat(weather, is(notNullValue()));
     }
 
     @Test

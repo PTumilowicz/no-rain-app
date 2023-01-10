@@ -19,7 +19,7 @@ public class OpenWeatherMapClient implements WeatherClient {
     private static final String WEATHER_URL_BEGIN = "https://api.openweathermap.org/data/2.5/weather?";
     private static final String FORECAST_URL_BEGIN = "https://api.openweathermap.org/data/2.5/forecast?";
     private static final String GEO_URL_BEGIN = "https://api.openweathermap.org/geo/1.0/direct?";
-    private static final String API_ID = "fc4be267d4aa71af6466c19cef08ca97";
+    private static final String API_ID = OpenWeatherMapConfig.API_ID;
     private static final String LANGUAGE = "pl";
     private static final String UNITS = "metric";
     private final RestTemplate restTemplate = new RestTemplate();

@@ -36,3 +36,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Config ###
+.src/main/java/com/example/norainapp/model/client/OpenWeatherMapConfig
