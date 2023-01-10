@@ -15,18 +15,14 @@ public class MainWindowController extends BaseController implements Initializabl
     @FXML Label poweredBy;
     @FXML NestedController leftNestedController;
     @FXML NestedController rightNestedController;
-    private final SavedProperties savedProperties;
+    private final SavedProperties savedProperties = new SavedProperties();
 
     public MainWindowController(ViewFactory viewFactory, String fxmlName) throws IOException {
         super(viewFactory, fxmlName);
-        savedProperties = new SavedProperties();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        leftNestedController.setLeft(true);
-        rightNestedController.setLeft(false);
-
         try {
             leftNestedController.showWeatherAction(savedProperties.getLeftCityName());
         } catch (Exception e) {
@@ -40,8 +36,32 @@ public class MainWindowController extends BaseController implements Initializabl
         }
     }
 
+    public void chooseLeftCityAction() throws IOException {
+        leftNestedController.chooseCityAction(this::saveLeftName);
+    }
+
+    public void chooseRightCityAction() throws IOException {
+        rightNestedController.chooseCityAction(this::saveRightName);
+    }
+
     public void closeAction() {
         Stage stage = (Stage) poweredBy.getScene().getWindow();
         viewFactory.closeStage(stage);
+    }
+
+    private void saveLeftName(String cityName) {
+        try {
+            savedProperties.setLeftCityName(cityName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void saveRightName(String cityName) {
+        try {
+            savedProperties.setRightCityName(cityName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

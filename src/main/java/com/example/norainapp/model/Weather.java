@@ -4,12 +4,12 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Weather {
-    private String cityName;
-    private int tempInCelsius;
-    private LocalDateTime date;
-    private String weatherDescription;
+    private final String cityName;
+    private final int tempInCelsius;
+    private final LocalDateTime date;
+    private final WeatherDescription weatherDescription;
 
-    public Weather(String cityName, int tempInCelsius, LocalDateTime date, String weatherDescription) {
+    public Weather(String cityName, int tempInCelsius, LocalDateTime date, WeatherDescription weatherDescription) {
         this.cityName = cityName;
         this.tempInCelsius = tempInCelsius;
         this.date = date;
@@ -28,7 +28,7 @@ public class Weather {
         return date;
     }
 
-    public String getWeatherDescription() {
+    public WeatherDescription getWeatherDescription() {
         return weatherDescription;
     }
 

@@ -1,6 +1,5 @@
 package com.example.norainapp;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -25,20 +24,19 @@ public class SavedProperties {
     public String getRightCityName() {
         return rightCityName;
     }
+
     public void setLeftCityName(String leftCityName) throws IOException {
         this.leftCityName = leftCityName;
-        saveProperties("leftCityName");
+        saveProperties("leftCityName", leftCityName);
     }
 
     public void setRightCityName(String rightCityName) throws IOException {
         this.rightCityName = rightCityName;
-        saveProperties("rightCityName");
+        saveProperties("rightCityName", rightCityName);
     }
 
-
-
-    private void saveProperties(String propertyName) throws IOException {
-        properties.setProperty(propertyName, leftCityName);
+    private void saveProperties(String propertyName, String selectedName) throws IOException {
+        properties.setProperty(propertyName, selectedName);
         properties.store(new FileWriter("cityNames.properties", StandardCharsets.UTF_8), "");
     }
 

@@ -1,6 +1,7 @@
 package com.example.norainapp.model.client;
 
 import com.example.norainapp.model.Weather;
+import com.example.norainapp.model.WeatherDescription;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TimeZone;
 
 public class OpenWeatherMapClient implements WeatherClient {
@@ -21,11 +23,13 @@ public class OpenWeatherMapClient implements WeatherClient {
     private static final String LANGUAGE = "pl";
     private static final String UNITS = "metric";
     private final RestTemplate restTemplate = new RestTemplate();
+    private final Gson gson = new Gson();
+    private static ZoneId zoneId = ZoneId.of("Europe/London");
 
     @Override
     public Weather getWeather(String cityName) {
         int temperature;
-        String weatherDescription;
+        WeatherDescription weatherDescription;
         String response = null;
 
         try {
@@ -36,11 +40,11 @@ public class OpenWeatherMapClient implements WeatherClient {
             return null;
         }
 
-        JsonObject main = new Gson().fromJson(response, JsonObject.class).getAsJsonObject("main");
-        JsonArray weather = new Gson().fromJson(response, JsonObject.class).getAsJsonArray("weather");
+        JsonObject main = gson.fromJson(response, JsonObject.class).getAsJsonObject("main");
+        JsonArray weather = gson.fromJson(response, JsonObject.class).getAsJsonArray("weather");
 
         temperature = (int) Math.round(main.get("temp").getAsDouble());
-        weatherDescription = weather.get(0).getAsJsonObject().get("main").getAsString();
+        weatherDescription = turnWeatherDescriptionToEnum(weather.get(0).getAsJsonObject().get("main").getAsString());
 
         return new Weather(cityName, temperature, LocalDateTime.now(), weatherDescription);
     }
@@ -70,7 +74,7 @@ public class OpenWeatherMapClient implements WeatherClient {
         String engCityName = null;
 
         try {
-            engCityName = new Gson().fromJson(response, JsonArray.class).
+            engCityName = gson.fromJson(response, JsonArray.class).
                     get(0).
                     getAsJsonObject().
                     getAsJsonObject("local_names").
@@ -78,7 +82,7 @@ public class OpenWeatherMapClient implements WeatherClient {
                     toString().
                     replaceAll("\"", "");
         } catch (Exception e) {
-            engCityName = new Gson().fromJson(response, JsonArray.class).
+            engCityName = gson.fromJson(response, JsonArray.class).
                     get(0).
                     getAsJsonObject().
                     get("name").
@@ -86,20 +90,18 @@ public class OpenWeatherMapClient implements WeatherClient {
                     replaceAll("\"", "");
         }
 
-        String countryName = new Gson().fromJson(response, JsonArray.class).
+        String countryName = gson.fromJson(response, JsonArray.class).
                 get(0).
                 getAsJsonObject().
                 get("country").
                 toString().
                 replaceAll("\"", "");
 
-        String completeCountryAndCity = engCityName  + ", " + countryName;
-
-        return completeCountryAndCity;
+        return engCityName  + ", " + countryName;
     }
 
     @Override
-    public ArrayList<Weather> getForecast(String cityName) {
+    public List<Weather> getForecast(String cityName) {
         String response = null;
         try {
             response = restTemplate.getForObject(FORECAST_URL_BEGIN + "q={city}&appid=" + API_ID + "&units=" + UNITS, String.class, cityName);
@@ -107,12 +109,12 @@ public class OpenWeatherMapClient implements WeatherClient {
             return null;
         }
 
-        ArrayList<Weather> forecast = new ArrayList<>();
-        ArrayList<Long> unixDateDays = new ArrayList<>();
+        List<Weather> forecast = new ArrayList<>();
+        List<Long> unixDateDays = new ArrayList<>();
 
         LocalDateTime currentDate = LocalDateTime.now();
         LocalDateTime currentDateNoon = LocalDate.now().atTime(12, 0);
-        ZoneId zoneId = ZoneId.of("Europe/London");
+
 
         for (int i = 0; i < 5; i++) {
             if (currentDate.isBefore(LocalDate.now().atTime(13, 0))) {
@@ -123,7 +125,7 @@ public class OpenWeatherMapClient implements WeatherClient {
         }
 
         try {
-            JsonArray forecastList = new Gson().fromJson(response, JsonObject.class).getAsJsonArray("list");
+            JsonArray forecastList = gson.fromJson(response, JsonObject.class).getAsJsonArray("list");
 
             for (Long unixDateDay : unixDateDays) {
                 for (int j = 0; j < forecastList.size(); j++) {
@@ -139,7 +141,7 @@ public class OpenWeatherMapClient implements WeatherClient {
                                 cityName,
                                 (int) Math.round(main.get("temp").getAsDouble()),
                                 convertedUnixTimeStamp,
-                                weather.get(0).getAsJsonObject().get("main").getAsString());
+                                turnWeatherDescriptionToEnum(weather.get(0).getAsJsonObject().get("main").getAsString()));
                         forecast.add(forecastWeather);
                         break;
                     }
@@ -150,5 +152,18 @@ public class OpenWeatherMapClient implements WeatherClient {
         }
 
         return forecast;
+    }
+
+    private WeatherDescription turnWeatherDescriptionToEnum(String weatherDescription) {
+        return switch (weatherDescription) {
+            case "Clear sky", "Clear" -> WeatherDescription.CLEAR;
+            case "Few clouds", "Scattered clouds" -> WeatherDescription.CLOUDY;
+            case "Broken clouds", "Clouds" -> WeatherDescription.CLOUDS;
+            case "Shower rain", "Rain", "Drizzle" -> WeatherDescription.RAIN;
+            case "Thunderstorm" -> WeatherDescription.STORM;
+            case "Snow" -> WeatherDescription.SNOW;
+            case "Mist", "Smoke", "Haze", "Dust", "Fog" -> WeatherDescription.MIST;
+            default -> WeatherDescription.UNKNOWN;
+        };
     }
 }

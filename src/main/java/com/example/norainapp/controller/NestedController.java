@@ -1,6 +1,6 @@
 package com.example.norainapp.controller;
 
-import com.example.norainapp.SavedProperties;
+import com.example.norainapp.controller.services.WeatherImageService;
 import com.example.norainapp.model.Weather;
 import com.example.norainapp.model.WeatherService;
 import com.example.norainapp.model.WeatherServiceFactory;
@@ -16,8 +16,10 @@ import javafx.scene.layout.HBox;
 import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 public class NestedController implements Initializable {
     @FXML
@@ -60,18 +62,10 @@ public class NestedController implements Initializable {
     private Label cityThirdDayTemp;
     @FXML
     private ImageView cityWeatherImg;
-    private boolean isLeft;
     private WeatherService weatherService;
+    private DateTimeFormatter dateTimeFormatter;
+    private final WeatherImageService weatherImageService = new WeatherImageService();
     private final ViewFactory viewFactory = new ViewFactory();
-    private final SavedProperties savedProperties;
-
-    public NestedController() throws IOException {
-        this.savedProperties = new SavedProperties();
-    }
-
-    public void setLeft(boolean isLeft) {
-        this.isLeft = isLeft;
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -79,14 +73,14 @@ public class NestedController implements Initializable {
     }
 
     @FXML
-    void chooseCityAction() throws IOException {
-        viewFactory.showCityModal(this::showWeatherAction, isLeft);
+    void chooseCityAction(Consumer<String> cityNameToSave) throws IOException {
+        viewFactory.showCityModal(this::showWeatherAction, cityNameToSave);
     }
 
     void showWeatherAction(String cityName) {
         WeatherClient weatherClient = weatherService.getWeatherClient();
         Weather weather;
-        ArrayList<Weather> forecast;
+        List<Weather> forecast;
         String cityAndCountryName = weatherClient.getEngCityAndCountryName(cityName);
 
         // Get the current weather and the forecast for selected city.
@@ -99,7 +93,7 @@ public class NestedController implements Initializable {
         }
 
         // Show the current weather for selected city
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM HH:mm");
+        dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM HH:mm");
 
         this.cityName.setVisible(true);
         this.cityName.setText(cityAndCountryName);
@@ -108,7 +102,7 @@ public class NestedController implements Initializable {
         this.cityDateTime.setVisible(true);
         this.cityDateTime.setText(weather.getDate().format(dateTimeFormatter));
 
-        Image image = getWeatherImage(weather.getWeatherDescription());
+        Image image = weatherImageService.getWeatherImage(weather.getWeatherDescription());
         this.cityWeatherImg.setImage(image);
 
         // Show the forecast for selected city
@@ -119,43 +113,26 @@ public class NestedController implements Initializable {
         this.cityFourthDayTemp.setText(forecast.get(3).getTempInCelsius() + " °C");
         this.cityFifthDayTemp.setText(forecast.get(4).getTempInCelsius() + " °C");
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE");
+        dateTimeFormatter = DateTimeFormatter.ofPattern("EEE");
 
-        this.cityFirstDayDate.setText(forecast.get(0).getDate().format(formatter));
-        image = getWeatherImage(forecast.get(0).getWeatherDescription());
+        this.cityFirstDayDate.setText(forecast.get(0).getDate().format(dateTimeFormatter));
+        image = weatherImageService.getWeatherImage(forecast.get(0).getWeatherDescription());
         this.cityFirstDayImg.setImage(image);
-        this.citySecondDayDate.setText(forecast.get(1).getDate().format(formatter));
-        image = getWeatherImage(forecast.get(1).getWeatherDescription());
+        this.citySecondDayDate.setText(forecast.get(1).getDate().format(dateTimeFormatter));
+        image = weatherImageService.getWeatherImage(forecast.get(1).getWeatherDescription());
         this.citySecondDayImg.setImage(image);
-        this.cityThirdDayDate.setText(forecast.get(2).getDate().format(formatter));
-        image = getWeatherImage(forecast.get(2).getWeatherDescription());
+        this.cityThirdDayDate.setText(forecast.get(2).getDate().format(dateTimeFormatter));
+        image = weatherImageService.getWeatherImage(forecast.get(2).getWeatherDescription());
         this.cityThirdDayImg.setImage(image);
-        this.cityFourthDayDate.setText(forecast.get(3).getDate().format(formatter));
-        image = getWeatherImage(forecast.get(3).getWeatherDescription());
+        this.cityFourthDayDate.setText(forecast.get(3).getDate().format(dateTimeFormatter));
+        image = weatherImageService.getWeatherImage(forecast.get(3).getWeatherDescription());
         this.cityFourthDayImg.setImage(image);
-        this.cityFifthDayDate.setText(forecast.get(4).getDate().format(formatter));
-        image = getWeatherImage(forecast.get(4).getWeatherDescription());
+        this.cityFifthDayDate.setText(forecast.get(4).getDate().format(dateTimeFormatter));
+        image = weatherImageService.getWeatherImage(forecast.get(4).getWeatherDescription());
         this.cityFifthDayImg.setImage(image);
     }
 
     void showCityNotChosen() {
         this.cityTempMax.setText("City not chosen");
-    }
-
-    private Image getWeatherImage(String weatherDescription) {
-        return switch (weatherDescription) {
-            case "Clear sky", "Clear" -> getImage("sun.png");
-            case "Few clouds", "Scattered clouds" -> getImage("cloud_sun.png");
-            case "Broken clouds", "Clouds" -> getImage("cloud.png");
-            case "Shower rain", "Rain", "Drizzle" -> getImage("rain.png");
-            case "Thunderstorm" -> getImage("storm.png");
-            case "Snow" -> getImage("snow.png");
-            case "Mist", "Smoke", "Haze", "Dust", "Fog" -> getImage("mist.png");
-            default -> getImage("pig.png");
-        };
-    }
-
-    private Image getImage(String iconPath) {
-        return new Image(this.getClass().getResourceAsStream("/images/%s".formatted(iconPath)));
     }
 }

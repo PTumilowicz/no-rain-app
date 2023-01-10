@@ -12,13 +12,29 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class ViewFactory {
-    private ArrayList<Stage> activeStages;
+    private final List<Stage> activeStages;
 
     public ViewFactory() {
         activeStages = new ArrayList<>();
+    }
+
+    public void showMainWindow() throws IOException {
+        BaseController controller = new MainWindowController(this, "mainWindowView.fxml");
+        initializeStage(controller);
+    }
+
+    public void showCityModal(Consumer<String> cityCallback, Consumer<String> cityNameToSave) throws IOException {
+        BaseController controller = new CityModalController(this, "cityModalView.fxml", cityCallback, cityNameToSave);
+        initializeStage(controller);
+    }
+
+    public void closeStage(Stage stageToClose) {
+        stageToClose.close();
+        activeStages.remove(stageToClose);
     }
 
     private void initializeStage(BaseController controller) {
@@ -45,20 +61,5 @@ public class ViewFactory {
         stage.setScene(scene);
         stage.show();
         activeStages.add(stage);
-    }
-
-    public void showMainWindow() throws IOException {
-        BaseController controller = new MainWindowController(this, "mainWindowView.fxml");
-        initializeStage(controller);
-    }
-
-    public void showCityModal(Consumer<String> cityCallback, boolean isLeft) throws IOException {
-        BaseController controller = new CityModalController(this, "cityModalView.fxml", cityCallback, isLeft);
-        initializeStage(controller);
-    }
-
-    public void closeStage(Stage stageToClose) {
-        stageToClose.close();
-        activeStages.remove(stageToClose);
     }
 }

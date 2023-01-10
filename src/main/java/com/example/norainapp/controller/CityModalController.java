@@ -18,19 +18,18 @@ import java.util.function.Consumer;
 
 public class CityModalController extends BaseController implements Initializable {
     private final Consumer<String> cityCallback;
+    private final Consumer<String> cityNameToSave;
     @FXML
     private Label errorLabel;
     @FXML
     private TextField cityTextField;
     private WeatherService weatherService;
-    private SavedProperties savedProperties;
-    private boolean isLeft;
+    private final SavedProperties savedProperties = new SavedProperties();
 
-    public CityModalController(ViewFactory viewFactory, String fxmlName, Consumer<String> cityCallback, boolean isLeft) throws IOException {
+    public CityModalController(ViewFactory viewFactory, String fxmlName, Consumer<String> cityCallback, Consumer<String> cityNameToSave) throws IOException {
         super(viewFactory, fxmlName);
         this.cityCallback = cityCallback;
-        this.savedProperties = new SavedProperties();
-        this.isLeft = isLeft;
+        this.cityNameToSave = cityNameToSave;
     }
 
     @FXML
@@ -49,12 +48,7 @@ public class CityModalController extends BaseController implements Initializable
             return;
         }
 
-        if (isLeft) {
-            savedProperties.setLeftCityName(cityInput);
-        } else {
-            savedProperties.setRightCityName(cityInput);
-        }
-
+        cityNameToSave.accept(cityInput);
         cityCallback.accept(cityInput);
         exitModalAction();
     }
