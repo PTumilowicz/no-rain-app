@@ -24,7 +24,7 @@ public class OpenWeatherMapClient implements WeatherClient {
     private static final String UNITS = "metric";
     private final RestTemplate restTemplate = new RestTemplate();
     private final Gson gson = new Gson();
-    private static ZoneId zoneId = ZoneId.of("Europe/London");
+    private static final ZoneId zoneId = ZoneId.of("Europe/London");
 
     @Override
     public Weather getWeather(String cityName) {
